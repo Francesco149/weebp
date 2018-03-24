@@ -2,4 +2,4 @@
 
 cat weebp.c | \
     sed -e '/^$/,$d' | sed 's|^[/* ]*||g' \
-    > README.md
+    > ../README.md

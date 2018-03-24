@@ -26,7 +26,7 @@ Copy-Item wp.exe $folder
 Copy-Item wp-headless.exe $folder
 Copy-Item weebp.dll $folder
 Copy-Item weebp.lib $folder
-git archive HEAD --prefix=src\ -o $folder\src.zip
+git -C .. archive HEAD -o src\$folder\src.zip
 Set-Location $folder
 &7z x src.zip
 Set-Location ..
@@ -38,7 +38,8 @@ if (Test-Path "$folder.zip") {
 &7z a "$folder.zip" $folder\0bootstrap.bat `
     $folder\wp.exe $folder\wp-headless.exe `
     $folder\weebp.dll $folder\weebp.lib $folder\src `
-    $folder\install.ps1
+    $folder\install.ps1 $folder\.gitignore $folder\README.md `
+    $folder\UNLICENSE
 
 Write-Host ""
 Write-Host "########################" -Foreground Yellow -Background Black

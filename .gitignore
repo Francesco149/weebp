@@ -7,7 +7,7 @@
 *~
 *.bak
 *.zip
-/mpv-install.bat
-/mpv-uninstall.bat
+/src/mpv-install.bat
+/src/mpv-uninstall.bat
 *.ico
 .*/
