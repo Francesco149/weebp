@@ -203,7 +203,7 @@
 #endif
 
 #define WP_VERSION_MAJOR 1 /* non-backwards-compatible changes */
-#define WP_VERSION_MINOR 0 /* backwards compatible api changes */
+#define WP_VERSION_MINOR 1 /* backwards compatible api changes */
 #define WP_VERSION_PATCH 0 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
@@ -296,6 +296,9 @@ WEEBAPI int wp_fullscreen(wnd_t wnd);
 
 /* execute a program in the background */
 WEEBAPI int wp_exec(char const* exe, char const* params);
+
+/* block the current thread for milliseconds */
+WEEBAPI void wp_sleep(int milliseconds);
 
 #endif /* WEEBP_H */
 
@@ -784,6 +787,12 @@ handle_t wp_mutex(char const* name)
     }
 
     return res;
+}
+
+WEEBAPI
+void wp_sleep(int milliseconds)
+{
+    Sleep(milliseconds);
 }
 
 #endif /* WP_IMPLEMENTATION */

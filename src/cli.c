@@ -13,7 +13,7 @@
 
 #define VERSION_MAJOR 0 /* non-backwards-compatible changes */
 #define VERSION_MINOR 5 /* backwards compatible api changes */
-#define VERSION_PATCH 0 /* backwards-compatible changes */
+#define VERSION_PATCH 1 /* backwards-compatible changes */
 
 #define VERSION_STR \
     STRINGIFY(VERSION_MAJOR) "." \
@@ -64,7 +64,7 @@ int id(int argc, char* argv[])
         }
 
         wp_err("retrying in 0.5s...");
-        Sleep(500);
+        wp_sleep(500);
     }
     
     printf(fmt, (unsigned)((size_t)worker & 0xFFFFFFFF));
@@ -179,13 +179,13 @@ parseargs:
     {
         if (flags & FL_WAIT)
         {
-            Sleep(100);
+            wp_sleep(100);
             goto parseargs; /* less ugly than more nesting or recursion */
         }
 
         while ((flags & FL_WAIT_VISIBLE) && !wp_visible(*result))
         {
-            Sleep(100);
+            wp_sleep(100);
         }
 
         if (!interactive) {
@@ -297,7 +297,7 @@ int daemon(int argc, char* argv[])
             wp_focus(wnds[i], 0);
         }
 
-        Sleep(poll_ms);
+        wp_sleep(poll_ms);
     }
 
     return 0;
