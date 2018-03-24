@@ -204,7 +204,7 @@
 
 #define WP_VERSION_MAJOR 0 /* non-backwards-compatible changes */
 #define WP_VERSION_MINOR 4 /* backwards compatible api changes */
-#define WP_VERSION_PATCH 0 /* backwards-compatible changes */
+#define WP_VERSION_PATCH 1 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
 #define STRINGIFY(x) STRINGIFY_(x)
@@ -561,11 +561,11 @@ void wp_focus(wnd_t wnd)
      * stuff right after capturing a window)
      */
     progman = FindWindowA("Progman", 0);
-    SendMessage(progman, WM_ACTIVATE, WA_CLICKACTIVE, (LPARAM)progman);
-    SendMessage(progman, WM_SETFOCUS, (WPARAM)progman, 0);
+    SendMessageA(progman, WM_ACTIVATE, WA_CLICKACTIVE, (LPARAM)progman);
+    SendMessageA(progman, WM_SETFOCUS, (WPARAM)progman, 0);
 
-    SendMessage(wnd, WM_ACTIVATE, WA_CLICKACTIVE, (LPARAM)wnd);
-    SendMessage(wnd, WM_SETFOCUS, (WPARAM)wnd, 0);
+    SendMessageA(wnd, WM_ACTIVATE, WA_CLICKACTIVE, (LPARAM)wnd);
+    SendMessageA(wnd, WM_SETFOCUS, (WPARAM)wnd, 0);
 }
 
 WEEBAPI
