@@ -10,7 +10,8 @@ Push-Location "$dir"
 function Write-Header($msg)
 {
     Write-Host ""
-    Write-Host "########################" -Foreground Yellow -Background Black
+    $hr = "#" * $Host.UI.RawUI.BufferSize.Width
+    Write-Host $hr -Foreground Yellow -Background Black
     Write-Host "> $msg" -Foreground Yellow -Background Black
 }
 
