@@ -203,7 +203,7 @@
 #endif
 
 #define WP_VERSION_MAJOR 0 /* non-backwards-compatible changes */
-#define WP_VERSION_MINOR 1 /* backwards compatible api changes */
+#define WP_VERSION_MINOR 2 /* backwards compatible api changes */
 #define WP_VERSION_PATCH 0 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
@@ -251,6 +251,9 @@ WEEBAPI wnd_t wp_pick_window(int* keys, int* cancel_keys, int poll_ms);
 
 /* embeds wnd into the wallpaper window */
 WEEBAPI int wp_add(wnd_t wnd);
+
+/* try to convince wnd that it's focused */
+WEEBAPI void wp_focus(wnd_t wnd);
 
 /* pops wnd out of the wallpaper window and attempts to restore the old style */
 WEEBAPI int wp_del(wnd_t wnd);
@@ -538,6 +541,13 @@ int wp_add(wnd_t wnd)
     ShowWindow(wnd, SW_SHOW);
 
     return 0;
+}
+
+WEEBAPI
+void wp_focus(wnd_t wnd)
+{
+    SendMessage(wnd, WM_ACTIVATE, WA_CLICKACTIVE, (LPARAM)wnd);
+    SendMessage(wnd, WM_SETFOCUS, (WPARAM)wnd, 0);
 }
 
 WEEBAPI

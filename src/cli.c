@@ -12,7 +12,7 @@
 #include "weebp.c"
 
 #define VERSION_MAJOR 0 /* non-backwards-compatible changes */
-#define VERSION_MINOR 1 /* backwards compatible api changes */
+#define VERSION_MINOR 2 /* backwards compatible api changes */
 #define VERSION_PATCH 0 /* backwards-compatible changes */
 
 #define VERSION_STR \
@@ -236,6 +236,18 @@ int add(int argc, char* argv[])
         return 1;
     }
 
+    return 0;
+}
+
+int focus(int argc, char* argv[])
+{
+    wnd_t wnd;
+
+    if (parse_window_params(wp_id(), argc, argv, 0, &wnd)) {
+        return 1;
+    }
+
+    wp_focus(wnd);
     return 0;
 }
 
@@ -469,6 +481,11 @@ command_t commands[] =
         "    -t|--wait: wait until a matching window is found\n"
         "    -v|--wait-visible: wait until a matching window is visible\n"
         "    -f|--fullscreen: expand window to fullscreen after adding it"
+    },
+    {
+        "focus", focus,
+        "try to convince a captured window that it's focused, useful for "
+        "interactive stuff that stops rendering"
     },
     {
         "del", del,
