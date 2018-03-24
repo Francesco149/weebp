@@ -9,17 +9,18 @@ for %%i in %weebp_artifacts% do echo %%i && del %%i >nul 2>&1
 echo.
 
 echo [ cli ]
-call:build cli.c %* -Fewp.exe %weebp_libs%
+call:build cli.c %* -Fewp.exe %weebp_libs% || EXIT /B 1
 echo.
 
 echo [ headless ]
 call:build cli.c %* -Fewp-headless.exe %weebp_libs% ^
     -link -SUBSYSTEM:WINDOWS ^
-    /entry:mainCRTStartup
+    /entry:mainCRTStartup ^
+    || EXIT /B 1
 echo.
 
 echo [ shared library ]
-call:build -LD weebp.c -DWP_LIB %* -Feweebp.dll %weebp_libs%
+call:build -LD weebp.c -DWP_LIB %* -Feweebp.dll %weebp_libs% || EXIT /B 1
 echo.
 
 echo [ static library ]
