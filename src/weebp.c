@@ -206,7 +206,7 @@
 
 #define WP_VERSION_MAJOR 1 /* non-backwards-compatible changes */
 #define WP_VERSION_MINOR 1 /* backwards compatible api changes */
-#define WP_VERSION_PATCH 0 /* backwards-compatible changes */
+#define WP_VERSION_PATCH 1 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
 #define STRINGIFY(x) STRINGIFY_(x)
@@ -404,8 +404,28 @@ wnd_t wp_id()
 
     if (!worker)
     {
-        wp_err("W: couldn't spawn WorkerW window, assuming Windows 7"
-            " and falling back to Progman");
+        wp_err("W: couldn't spawn WorkerW window, trying old method");
+        SendMessageA(progman, 0x052C, 0, 0);
+
+        log1("checking for wallpaper");
+        EnumWindows(find_worker, (LPARAM)&worker);
+
+        /*
+         * windows 7 with aero is almost the same as windows 10, except that we
+         * have to hide the WorkerW window and render to Progman child windows
+         * instead
+         */
+
+        if (worker)
+        {
+            ShowWindow(worker, SW_HIDE);
+            worker = progman;
+        }
+    }
+
+    if (!worker)
+    {
+        wp_err("W: couldnt spawn window behind icons, falling back to Progman");
         worker = progman;
     }
 
