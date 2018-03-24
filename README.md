@@ -23,7 +23,8 @@ write glue scripts to automate it or bind it to keys anyways
 would allow interactive wallpapers, I'll implement it ASAP
 
 # installation
-download the latest binaries from https://Francesco149/weebp/releases
+download the latest binaries from
+https://github.com/Francesco149/weebp/releases
 
 extract the zip and place the folder anywhere you like
 
