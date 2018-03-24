@@ -203,8 +203,8 @@
 #endif
 
 #define WP_VERSION_MAJOR 0 /* non-backwards-compatible changes */
-#define WP_VERSION_MINOR 0 /* backwards compatible api changes */
-#define WP_VERSION_PATCH 1 /* backwards-compatible changes */
+#define WP_VERSION_MINOR 1 /* backwards compatible api changes */
+#define WP_VERSION_PATCH 0 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
 #define STRINGIFY(x) STRINGIFY_(x)
@@ -273,6 +273,9 @@ WEEBAPI int wp_get_rect(wnd_t wnd, rect_t* rect);
 
 /* move and resize window */
 WEEBAPI int wp_move(wnd_t wnd, long left, long top, long right, long bottom);
+
+/* checks whether the window is visible */
+WEEBAPI int wp_visible(wnd_t wnd);
 
 /* make wnd fill the monitor it's on */
 WEEBAPI int wp_fullscreen(wnd_t wnd);
@@ -685,6 +688,12 @@ int wp_move(wnd_t wnd, long left, long top, long right, long bottom)
         return 1;
     }
     return 0;
+}
+
+WEEBAPI
+int wp_visible(wnd_t wnd)
+{
+    return IsWindowVisible(wnd) == TRUE;
 }
 
 WEEBAPI

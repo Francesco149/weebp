@@ -12,8 +12,8 @@
 #include "weebp.c"
 
 #define VERSION_MAJOR 0 /* non-backwards-compatible changes */
-#define VERSION_MINOR 0 /* backwards compatible api changes */
-#define VERSION_PATCH 1 /* backwards-compatible changes */
+#define VERSION_MINOR 1 /* backwards compatible api changes */
+#define VERSION_PATCH 0 /* backwards-compatible changes */
 
 #define VERSION_STR \
     STRINGIFY(VERSION_MAJOR) "." \
@@ -112,8 +112,11 @@ int info(int argc, char* argv[])
 int parse_window_params(wnd_t parent, int argc, char* argv[], int interactive,
     wnd_t* result)
 {
+    static const int FL_WAIT = 1<<0;
+    static const int FL_WAIT_VISIBLE = 1<<1;
+
     int i;
-    unsigned poll_ms = 0;
+    int flags = 0;
 
     *result = 0;
 
@@ -164,15 +167,25 @@ parseargs:
         }
 
         else if (!strcmp(argv[i], "-t") || !strcmp(argv[i], "--wait")) {
-            poll_ms = 100;
+            flags |= FL_WAIT;
+        }
+
+        else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--wait-visible")) {
+            flags |= FL_WAIT_VISIBLE;
         }
     }
 
     if (!*result)
     {
-        if (poll_ms) {
-            Sleep(poll_ms);
+        if (flags & FL_WAIT)
+        {
+            Sleep(100);
             goto parseargs; /* less ugly than more nesting or recursion */
+        }
+
+        while ((flags & FL_WAIT_VISIBLE) && !wp_visible(*result))
+        {
+            Sleep(100);
         }
 
         if (!interactive) {
@@ -454,6 +467,7 @@ command_t commands[] =
         "    -c|--class abc: window class\n"
         "    -n|--name abc: window name\n"
         "    -t|--wait: wait until a matching window is found\n"
+        "    -v|--wait-visible: wait until a matching window is visible\n"
         "    -f|--fullscreen: expand window to fullscreen after adding it"
     },
     {
