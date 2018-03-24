@@ -1,0 +1,13 @@
+*.exe
+*.com
+*.obj
+*.lib
+*.dll
+*.exp
+*~
+*.bak
+*.zip
+/mpv-install.bat
+/mpv-uninstall.bat
+*.ico
+.*/
