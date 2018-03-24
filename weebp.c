@@ -56,23 +56,15 @@
  * check out [mpv-install.bat][3] if you wish to make mpv your default player
  * 
  * # recipe: automatic wallpaper set-up
- * this example starts Google Chrome in kiosk mode (borderless) on a nice 3D
- * demo site then sets it as the wallpaper on the left monitor. after that,
- * it starts infinitely looping playback of
+ * this example starts infinitely looping playback of
  * ```%USERPROFILE%\Videos\wallpapers``` using mpv, moves it to the right
  * monitor and sets it as the wallpaper on that monitor.
+ * then it starts Google Chrome in kiosk mode (borderless) on a nice 3D
+ * demo site then sets it as the wallpaper on the left monitor.
  * 
  * create a .bat file in the same folder as wp.exe and put the following in it
  * ```bat
  * @echo off
- * 
- * wp run "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" ^
- *     --incognito ^
- *     --kiosk ^
- *     --no-default-browser-check ^
- *     https://awkure.github.io
- * 
- * wp add --wait --fullscreen --name "Purgatory | Home - Google Chrome"
  * 
  * wp run mpv ^
  *     --player-operation-mode=pseudo-gui ^
@@ -86,6 +78,14 @@
  * 
  * wp mv --wait --class mpv -x 1920
  * wp add --wait --fullscreen --class mpv
+ * 
+ * wp run "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" ^
+ *     --incognito ^
+ *     --kiosk ^
+ *     --no-default-browser-check ^
+ *     https://awkure.github.io
+ * 
+ * wp add --wait --fullscreen --name "Purgatory | Home - Google Chrome"
  * ```
  * 
  * if you have youtube-dl in the same folder as mpv, you can plug any youtube,
