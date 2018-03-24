@@ -4,22 +4,27 @@ set weebp_artifacts=(wp.exe wp-headless.exe cli.obj weebp.dll weebp.lib ^
     weebp.obj)
 set "weebp_libs=USER32.LIB SHELL32.LIB"
 
-echo *** cleaning
+echo [ cleaning ]
 for %%i in %weebp_artifacts% do echo %%i && del %%i >nul 2>&1
+echo.
 
-echo *** cli
+echo [ cli ]
 call:build cli.c %* -Fewp.exe %weebp_libs%
+echo.
 
-echo *** headless
+echo [ headless ]
 call:build cli.c %* -Fewp-headless.exe %weebp_libs% ^
     -link -SUBSYSTEM:WINDOWS ^
     /entry:mainCRTStartup
+echo.
 
-echo *** shared library
+echo [ shared library ]
 call:build -LD weebp.c -DWP_LIB %* -Feweebp.dll %weebp_libs%
+echo.
 
-echo *** static library
+echo [ static library ]
 link -DLL -OUT:weebp.lib weebp.obj || EXIT /B 1
+echo.
 
 goto:eof
 
