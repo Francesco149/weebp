@@ -3,7 +3,9 @@ free and open-source wallpaper engine. set any window or video as your
 wallpaper
 
 ![](https://i.imgur.com/pSAwGi9.gif)
+
 ![](https://i.imgur.com/epr2oLx.gif)
+
 ![](https://i.imgur.com/TDpJhp3.gif)
 
 this was put together in ~2 afternoons worth of coding. I can't maintain this
