@@ -2,6 +2,8 @@
  * free and open-source wallpaper engine. set any window or video as your
  * wallpaper
  * 
+ * ![](https://i.imgur.com/Hqy1uX2.gif)
+ * 
  * ![](https://i.imgur.com/VB1Glnu.gif)
  * 
  * github doesn't like having big gifs in the readme, so here's a
