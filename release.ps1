@@ -21,6 +21,7 @@ $clout = & cl 2>&1 | ForEach-Object{ "$_" }
 $folder = $folder + $Matches[2]
 mkdir $folder
 Copy-Item 0bootstrap.bat $folder
+Copy-Item install.ps1 $folder
 Copy-Item wp.exe $folder
 Copy-Item wp-headless.exe $folder
 Copy-Item weebp.dll $folder
@@ -36,7 +37,8 @@ if (Test-Path "$folder.zip") {
 
 &7z a "$folder.zip" $folder\0bootstrap.bat `
     $folder\wp.exe $folder\wp-headless.exe `
-    $folder\weebp.dll $folder\weebp.lib $folder\src
+    $folder\weebp.dll $folder\weebp.lib $folder\src `
+    $folder\install.ps1
 
 Write-Host ""
 Write-Host "########################" -Foreground Yellow -Background Black
