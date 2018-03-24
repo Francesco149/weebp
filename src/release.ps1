@@ -23,13 +23,17 @@ $folder = "weebp-" + $(.\wp.exe version) + "-windows-"
 $clout = & cl 2>&1 | ForEach-Object{ "$_" }
 "$clout" -match "(Microsoft.*for )([a-z0-9\-_]+)" | Out-Null
 $folder = $folder + $Matches[2]
+
+$files = "0bootstrap.bat","install.ps1","wp.exe","wp-headless.exe","weebp.dll",`
+    "weebp.lib"
+$package_files = ".gitignore","README.md","UNLICENSE"
+
 mkdir $folder
-Copy-Item 0bootstrap.bat $folder
-Copy-Item install.ps1 $folder
-Copy-Item wp.exe $folder
-Copy-Item wp-headless.exe $folder
-Copy-Item weebp.dll $folder
-Copy-Item weebp.lib $folder
+
+foreach ($file in $files) {
+    Copy-Item $file $folder
+}
+
 git -C .. archive HEAD -o src\$folder\src.zip
 Set-Location $folder
 &7z x src.zip
@@ -39,11 +43,9 @@ if (Test-Path "$folder.zip") {
     Remove-Item "$folder.zip"
 }
 
-&7z a "$folder.zip" $folder\0bootstrap.bat `
-    $folder\wp.exe $folder\wp-headless.exe `
-    $folder\weebp.dll $folder\weebp.lib $folder\src `
-    $folder\install.ps1 $folder\.gitignore $folder\README.md `
-    $folder\UNLICENSE
+$files += $package_files
+
+&7z a "$folder.zip" $folder\src $($files | ForEach-Object { ,"$folder\$_" })
 
 Write-Header "Result:"
 &7z l "$folder.zip"
