@@ -6,44 +6,29 @@ del weebp.dll >nul 2>&1
 del weebp.lib >nul 2>&1
 del weebp.obj >nul 2>&1
 
+set "weebp_libs=USER32.LIB SHELL32.LIB"
+
 echo *** cli
-cl  -D_CRT_SECURE_NO_WARNINGS=1 ^
-    -DNOMINMAX=1 ^
-    -DWP_BUILDING ^
-    -O2 -nologo -MT -Gm- -GR- -EHsc -W4 ^
-    %* ^
-    cli.c ^
-    -Fewp.exe ^
-    USER32.LIB ^
-    SHELL32.LIB ^
-    || EXIT /B 1
+call:build cli.c %* -Fewp.exe %weebp_libs%
 
 echo *** headless
-cl  -D_CRT_SECURE_NO_WARNINGS=1 ^
-    -DNOMINMAX=1 ^
-    -DWP_BUILDING ^
-    -O2 -nologo -MT -Gm- -GR- -EHsc -W4 ^
-    %* ^
-    cli.c ^
-    -Fewp-headless.exe ^
-    USER32.LIB ^
-    SHELL32.LIB ^
+call:build cli.c %* -Fewp-headless.exe %weebp_libs% ^
     -link -SUBSYSTEM:WINDOWS ^
-    /entry:mainCRTStartup ^
-    || EXIT /B 1
+    /entry:mainCRTStartup
 
 echo *** shared library
-cl  -D_CRT_SECURE_NO_WARNINGS=1 ^
-    -DNOMINMAX=1 ^
-    -DWP_BUILDING ^
-    -DWP_LIB ^
-    -LD -O2 -nologo -MT -Gm- -GR- -EHsc -W4 ^
-    %* ^
-    weebp.c ^
-    -Feweebp.dll ^
-    USER32.LIB ^
-    SHELL32.LIB ^
-    || EXIT /B 1
+call:build -LD weebp.c -DWP_LIB %* -Feweebp.dll %weebp_libs%
 
 echo *** static library
 link -DLL -OUT:weebp.lib weebp.obj || EXIT /B 1
+
+goto:eof
+
+:build
+cl  -D_CRT_SECURE_NO_WARNINGS=1 ^
+    -DNOMINMAX=1 ^
+    -DWP_BUILDING ^
+    -O2 -nologo -MT -Gm- -GR- -EHsc -W4 ^
+    %* ^
+    || EXIT /B 1
+goto:eof
