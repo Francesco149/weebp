@@ -12,7 +12,7 @@
 #include "weebp.c"
 
 #define VERSION_MAJOR 0 /* non-backwards-compatible changes */
-#define VERSION_MINOR 3 /* backwards compatible api changes */
+#define VERSION_MINOR 4 /* backwards compatible api changes */
 #define VERSION_PATCH 0 /* backwards-compatible changes */
 
 #define VERSION_STR \
@@ -212,9 +212,12 @@ parseargs:
 
 int add(int argc, char* argv[])
 {
+    static const int FL_FULLSCREEN = 1<<0;
+    static const int FL_NOFOCUS = 1<<1;
+
     int i;
     wnd_t wnd = 0;
-    int fullscreen = 0;
+    int flags = 0;
 
     if (parse_window_params(0, argc, argv, 1, &wnd)) {
         return 1;
@@ -223,8 +226,11 @@ int add(int argc, char* argv[])
     for (i = 0; i < argc; ++i)
     {
         if (!strcmp(argv[i], "-f") || !strcmp(argv[i], "--fullscreen")) {
-            fullscreen = 1;
-            break;
+            flags |= FL_FULLSCREEN;
+        }
+
+        if (!strcmp(argv[i], "--no-focus")) {
+            flags |= FL_NOFOCUS;
         }
     }
 
@@ -232,8 +238,12 @@ int add(int argc, char* argv[])
         return 1;
     }
 
-    if (fullscreen && wp_fullscreen(wnd)) {
+    if ((flags & FL_FULLSCREEN) && wp_fullscreen(wnd)) {
         return 1;
+    }
+
+    if (!(flags & FL_NOFOCUS)) {
+        wp_focus(wnd);
     }
 
     return 0;
