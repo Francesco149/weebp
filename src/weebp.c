@@ -262,12 +262,6 @@ WEEBAPI int wp_add(wnd_t wnd);
  */
 WEEBAPI void wp_focus(wnd_t wnd, int ensure);
 
-/*
- * create a named mutex.
- * this is currently used to ensure a single instance of the cli's daemon mode
- * */
-WEEBAPI handle_t wp_mutex(char const* name);
-
 /* pops wnd out of the wallpaper window and attempts to restore the old style */
 WEEBAPI int wp_del(wnd_t wnd);
 
@@ -298,6 +292,12 @@ WEEBAPI int wp_fullscreen(wnd_t wnd);
 
 /* execute a program in the background */
 WEEBAPI int wp_exec(char const* exe, char const* params);
+
+/*
+ * create a named mutex.
+ * this is currently used to ensure a single instance of the cli's daemon mode
+ * */
+WEEBAPI handle_t wp_mutex(char const* name);
 
 /* block the current thread for milliseconds */
 WEEBAPI void wp_sleep(int milliseconds);
