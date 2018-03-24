@@ -202,9 +202,9 @@
 #define WEEBAPI
 #endif
 
-#define WP_VERSION_MAJOR 0 /* non-backwards-compatible changes */
-#define WP_VERSION_MINOR 4 /* backwards compatible api changes */
-#define WP_VERSION_PATCH 1 /* backwards-compatible changes */
+#define WP_VERSION_MAJOR 1 /* non-backwards-compatible changes */
+#define WP_VERSION_MINOR 0 /* backwards compatible api changes */
+#define WP_VERSION_PATCH 0 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
 #define STRINGIFY(x) STRINGIFY_(x)
@@ -253,8 +253,12 @@ WEEBAPI wnd_t wp_pick_window(int* keys, int* cancel_keys, int poll_ms);
 /* embeds wnd into the wallpaper window */
 WEEBAPI int wp_add(wnd_t wnd);
 
-/* try to convince wnd that it's focused */
-WEEBAPI void wp_focus(wnd_t wnd);
+/*
+ * try to convince wnd that it's focused
+ * if ensure is non-zero, focus will be switched off first to ensure that
+ * focus events are triggered more reliably
+ */
+WEEBAPI void wp_focus(wnd_t wnd, int ensure);
 
 /*
  * create a named mutex.
@@ -551,18 +555,21 @@ int wp_add(wnd_t wnd)
 }
 
 WEEBAPI
-void wp_focus(wnd_t wnd)
+void wp_focus(wnd_t wnd, int ensure)
 {
-    wnd_t progman;
-
     /*
-     * by focusing progman first we ensure that we trigger focus events even
-     * if the window already has focus (this avoids loss of focus when clicking
-     * stuff right after capturing a window)
-     */
-    progman = FindWindowA("Progman", 0);
-    SendMessageA(progman, WM_ACTIVATE, WA_CLICKACTIVE, (LPARAM)progman);
-    SendMessageA(progman, WM_SETFOCUS, (WPARAM)progman, 0);
+    * by focusing progman first we ensure that we trigger focus events even
+    * if the window already has focus (this avoids loss of focus when clicking
+    * stuff right after capturing a window)
+    */
+    if (ensure)
+    {
+        wnd_t progman;
+
+        progman = FindWindowA("Progman", 0);
+        SendMessageA(progman, WM_ACTIVATE, WA_CLICKACTIVE, (LPARAM)progman);
+        SendMessageA(progman, WM_SETFOCUS, (WPARAM)progman, 0);
+    }
 
     SendMessageA(wnd, WM_ACTIVATE, WA_CLICKACTIVE, (LPARAM)wnd);
     SendMessageA(wnd, WM_SETFOCUS, (WPARAM)wnd, 0);

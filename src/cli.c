@@ -12,7 +12,7 @@
 #include "weebp.c"
 
 #define VERSION_MAJOR 0 /* non-backwards-compatible changes */
-#define VERSION_MINOR 4 /* backwards compatible api changes */
+#define VERSION_MINOR 5 /* backwards compatible api changes */
 #define VERSION_PATCH 0 /* backwards-compatible changes */
 
 #define VERSION_STR \
@@ -243,7 +243,7 @@ int add(int argc, char* argv[])
     }
 
     if (!(flags & FL_NOFOCUS)) {
-        wp_focus(wnd);
+        wp_focus(wnd, 1);
     }
 
     return 0;
@@ -257,7 +257,7 @@ int focus(int argc, char* argv[])
         return 1;
     }
 
-    wp_focus(wnd);
+    wp_focus(wnd, 1);
     return 0;
 }
 
@@ -294,7 +294,7 @@ int daemon(int argc, char* argv[])
 
         n = wp_list(wp_id(), wnds, 512);
         for (i = 0; i < n; ++i) {
-            wp_focus(wnds[i]);
+            wp_focus(wnds[i], 0);
         }
 
         Sleep(poll_ms);
