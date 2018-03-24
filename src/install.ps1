@@ -7,7 +7,7 @@ function Get-ScriptDirectory
 $scriptdir = $(Get-ScriptDirectory)
 
 $oldpath = [Environment]::GetEnvironmentVariable("PATH", "User")
-$newpath = "$oldpath;$scriptdir\".Split(";")
+$newpath = "$scriptdir\;$oldpath".Split(";")
 $newpath = $newpath | Select-Object -uniq
 $newpath = $newpath -join ";"
 [Environment]::SetEnvironmentVariable("PATH", "$newpath", "User")
