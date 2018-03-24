@@ -12,7 +12,7 @@
 #include "weebp.c"
 
 #define VERSION_MAJOR 0 /* non-backwards-compatible changes */
-#define VERSION_MINOR 2 /* backwards compatible api changes */
+#define VERSION_MINOR 3 /* backwards compatible api changes */
 #define VERSION_PATCH 0 /* backwards-compatible changes */
 
 #define VERSION_STR \
@@ -251,6 +251,48 @@ int focus(int argc, char* argv[])
     return 0;
 }
 
+int daemon(int argc, char* argv[])
+{
+    int i;
+    int poll_ms = 16;
+
+    if (!wp_mutex("weebpd"))
+    {
+        puts(
+            "the weebp daemon appears to be already running. if you "
+            "think this is a mistake, kill all instances of wp.exe and "
+            "wp-headless.exe from the task manager"
+        );
+
+        return 1;
+    }
+
+    for (i = 0; i < argc; ++i)
+    {
+        if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--rate")) {
+            if (i >= argc - 1) return 1;
+            poll_ms = atoi(argv[++i]);
+        }
+    }
+
+    puts("running as a daemon");
+
+    while (1)
+    {
+        int n;
+        wnd_t wnds[512];
+
+        n = wp_list(wp_id(), wnds, 512);
+        for (i = 0; i < n; ++i) {
+            wp_focus(wnds[i]);
+        }
+
+        Sleep(poll_ms);
+    }
+
+    return 0;
+}
+
 int del(int argc, char* argv[])
 {
     wnd_t wnd = 0;
@@ -486,6 +528,15 @@ command_t commands[] =
         "focus", focus,
         "try to convince a captured window that it's focused, useful for "
         "interactive stuff that stops rendering"
+    },
+    {
+        "daemon", daemon,
+        "run as a daemon, currently used to maintain fake focus of captured "
+        "windows, but might eventually be used for a tray icon or gui\n"
+        "note that usually a single call to wp focus will do the job and this "
+        "is not needed. only run it if your particular application isn't "
+        "maintaining focus\n"
+        "    -r|--rate 123: poll rate in milliseconds"
     },
     {
         "del", del,

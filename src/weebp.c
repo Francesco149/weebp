@@ -203,7 +203,7 @@
 #endif
 
 #define WP_VERSION_MAJOR 0 /* non-backwards-compatible changes */
-#define WP_VERSION_MINOR 2 /* backwards compatible api changes */
+#define WP_VERSION_MINOR 3 /* backwards compatible api changes */
 #define WP_VERSION_PATCH 0 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
@@ -218,6 +218,7 @@
 
 typedef HWND wnd_t;
 typedef RECT rect_t;
+typedef HANDLE handle_t;
 
 /*
  * unless specified, all int-returning functions return 0 on success and
@@ -254,6 +255,12 @@ WEEBAPI int wp_add(wnd_t wnd);
 
 /* try to convince wnd that it's focused */
 WEEBAPI void wp_focus(wnd_t wnd);
+
+/*
+ * create a named mutex.
+ * this is currently used to ensure a single instance of the cli's daemon mode
+ * */
+WEEBAPI handle_t wp_mutex(char const* name);
 
 /* pops wnd out of the wallpaper window and attempts to restore the old style */
 WEEBAPI int wp_del(wnd_t wnd);
@@ -738,6 +745,27 @@ int wp_exec(char const* file, char const* params)
     }
 
     return 0;
+}
+
+WEEBAPI
+handle_t wp_mutex(char const* name)
+{
+    char full_name[512];
+    handle_t res;
+
+    snprintf(full_name, sizeof(full_name) - 1,
+        "Global\\{1CAC44DF-F52B-49BB-991D-89D1E7E7A9A6}_%s", name);
+
+    res = CreateMutexA(0, 0, full_name);
+    if (!res) {
+        wp_err("CreateMutexA failed, GLE=%08X", GetLastError());
+    }
+
+    if (GetLastError() == ERROR_ALREADY_EXISTS) {
+        res = 0;
+    }
+
+    return res;
 }
 
 #endif /* WP_IMPLEMENTATION */
