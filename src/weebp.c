@@ -203,7 +203,7 @@
 #endif
 
 #define WP_VERSION_MAJOR 0 /* non-backwards-compatible changes */
-#define WP_VERSION_MINOR 3 /* backwards compatible api changes */
+#define WP_VERSION_MINOR 4 /* backwards compatible api changes */
 #define WP_VERSION_PATCH 0 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
@@ -553,6 +553,17 @@ int wp_add(wnd_t wnd)
 WEEBAPI
 void wp_focus(wnd_t wnd)
 {
+    wnd_t progman;
+
+    /*
+     * by focusing progman first we ensure that we trigger focus events even
+     * if the window already has focus (this avoids loss of focus when clicking
+     * stuff right after capturing a window)
+     */
+    progman = FindWindowA("Progman", 0);
+    SendMessage(progman, WM_ACTIVATE, WA_CLICKACTIVE, (LPARAM)progman);
+    SendMessage(progman, WM_SETFOCUS, (WPARAM)progman, 0);
+
     SendMessage(wnd, WM_ACTIVATE, WA_CLICKACTIVE, (LPARAM)wnd);
     SendMessage(wnd, WM_SETFOCUS, (WPARAM)wnd, 0);
 }
