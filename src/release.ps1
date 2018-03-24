@@ -7,14 +7,17 @@ $dir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 
 Push-Location "$dir"
 
-Write-Host ""
-Write-Host "########################" -Foreground Yellow -Background Black
-Write-Host "> Compiling and stripping" -Foreground Yellow -Background Black
+function Write-Header($msg)
+{
+    Write-Host ""
+    Write-Host "########################" -Foreground Yellow -Background Black
+    Write-Host "> $msg" -Foreground Yellow -Background Black
+}
+
+Write-Header "Compiling and stripping"
 cmd /c "build.bat"
 
-Write-Host ""
-Write-Host "########################" -Foreground Yellow -Background Black
-Write-Host "> Packaging" -Foreground Yellow -Background Black
+Write-Header "Packaging"
 $folder = "weebp-" + $(.\wp.exe version) + "-windows-"
 $clout = & cl 2>&1 | ForEach-Object{ "$_" }
 "$clout" -match "(Microsoft.*for )([a-z0-9\-_]+)" | Out-Null
@@ -41,9 +44,7 @@ if (Test-Path "$folder.zip") {
     $folder\install.ps1 $folder\.gitignore $folder\README.md `
     $folder\UNLICENSE
 
-Write-Host ""
-Write-Host "########################" -Foreground Yellow -Background Black
-Write-Host "> Result:" -Foreground Yellow -Background Black
+Write-Header "Result:"
 &7z l "$folder.zip"
 
 Remove-Item $folder -Force -Recurse
