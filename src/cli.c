@@ -13,7 +13,7 @@
 
 #define VERSION_MAJOR 0 /* non-backwards-compatible changes */
 #define VERSION_MINOR 5 /* backwards compatible api changes */
-#define VERSION_PATCH 1 /* backwards-compatible changes */
+#define VERSION_PATCH 2 /* backwards-compatible changes */
 
 #define VERSION_STR \
     STRINGIFY(VERSION_MAJOR) "." \
