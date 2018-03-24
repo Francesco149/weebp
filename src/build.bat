@@ -1,12 +1,11 @@
 @echo off
 
-del wp.exe >nul 2>&1
-del cli.obj >nul 2>&1
-del weebp.dll >nul 2>&1
-del weebp.lib >nul 2>&1
-del weebp.obj >nul 2>&1
-
+set weebp_artifacts=(wp.exe wp-headless.exe cli.obj weebp.dll weebp.lib ^
+    weebp.obj)
 set "weebp_libs=USER32.LIB SHELL32.LIB"
+
+echo *** cleaning
+for %%i in %weebp_artifacts% do echo %%i && del %%i >nul 2>&1
 
 echo *** cli
 call:build cli.c %* -Fewp.exe %weebp_libs%
