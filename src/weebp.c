@@ -210,7 +210,7 @@
 
 #define WP_VERSION_MAJOR 1 /* non-backwards-compatible changes */
 #define WP_VERSION_MINOR 1 /* backwards compatible api changes */
-#define WP_VERSION_PATCH 2 /* backwards-compatible changes */
+#define WP_VERSION_PATCH 3 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
 #define STRINGIFY(x) STRINGIFY_(x)
@@ -779,6 +779,7 @@ int wp_fullscreen(wnd_t wnd)
         return 1;
     }
 
+    MapWindowPoints(0, wp_id(), (LPPOINT)&mi.rcMonitor, 2);
     return wp_move(wnd, mi.rcMonitor.left, mi.rcMonitor.top, mi.rcMonitor.right,
         mi.rcMonitor.bottom);
 }
