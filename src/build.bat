@@ -24,7 +24,8 @@ call:build -LD weebp.c -DWP_LIB %* -Feweebp.dll %weebp_libs% || EXIT /B 1
 echo.
 
 echo [ static library ]
-link -DLL -OUT:weebp.lib weebp.obj || EXIT /B 1
+call:build -c weebp.c || EXIT /B 1
+lib weebp.obj || EXIT /B 1
 echo.
 
 goto:eof

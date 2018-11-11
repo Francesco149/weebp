@@ -199,14 +199,18 @@
 #include <stdio.h>
 
 #ifdef WP_LIB
+#ifdef WP_IMPLEMENTATION
 #define WEEBAPI __declspec(dllexport)
+#else
+#define WEEBAPI __declspec(dllimport)
+#endif
 #else
 #define WEEBAPI
 #endif
 
 #define WP_VERSION_MAJOR 1 /* non-backwards-compatible changes */
 #define WP_VERSION_MINOR 1 /* backwards compatible api changes */
-#define WP_VERSION_PATCH 1 /* backwards-compatible changes */
+#define WP_VERSION_PATCH 2 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
 #define STRINGIFY(x) STRINGIFY_(x)
