@@ -12,8 +12,8 @@
 #include "weebp.c"
 
 #define VERSION_MAJOR 0 /* non-backwards-compatible changes */
-#define VERSION_MINOR 5 /* backwards compatible api changes */
-#define VERSION_PATCH 2 /* backwards-compatible changes */
+#define VERSION_MINOR 6 /* backwards compatible api changes */
+#define VERSION_PATCH 0 /* backwards-compatible changes */
 
 #define VERSION_STR \
     STRINGIFY(VERSION_MAJOR) "." \
@@ -214,6 +214,7 @@ int add(int argc, char* argv[])
 {
     static const int FL_FULLSCREEN = 1<<0;
     static const int FL_NOFOCUS = 1<<1;
+    static const int FL_PANORAMIC = 1<<2;
 
     int i;
     wnd_t wnd = 0;
@@ -229,6 +230,10 @@ int add(int argc, char* argv[])
             flags |= FL_FULLSCREEN;
         }
 
+        if (!strcmp(argv[i], "-p") || !strcmp(argv[i], "--panoramic")) {
+            flags |= FL_PANORAMIC;
+        }
+
         if (!strcmp(argv[i], "--no-focus")) {
             flags |= FL_NOFOCUS;
         }
@@ -239,6 +244,10 @@ int add(int argc, char* argv[])
     }
 
     if ((flags & FL_FULLSCREEN) && wp_fullscreen(wnd)) {
+        return 1;
+    }
+
+    if ((flags & FL_PANORAMIC) && wp_panoramic(wnd)) {
         return 1;
     }
 

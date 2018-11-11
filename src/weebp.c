@@ -209,8 +209,8 @@
 #endif
 
 #define WP_VERSION_MAJOR 1 /* non-backwards-compatible changes */
-#define WP_VERSION_MINOR 1 /* backwards compatible api changes */
-#define WP_VERSION_PATCH 4 /* backwards-compatible changes */
+#define WP_VERSION_MINOR 2 /* backwards compatible api changes */
+#define WP_VERSION_PATCH 0 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
 #define STRINGIFY(x) STRINGIFY_(x)
@@ -293,6 +293,9 @@ WEEBAPI int wp_visible(wnd_t wnd);
 
 /* make wnd fill the monitor it's on */
 WEEBAPI int wp_fullscreen(wnd_t wnd);
+
+/* make the wnd fill all monitors (entire desktop window) */
+WEEBAPI int wp_panoramic(wnd_t wnd);
 
 /* execute a program in the background */
 WEEBAPI int wp_exec(char const* exe, char const* params);
@@ -789,6 +792,20 @@ int wp_fullscreen(wnd_t wnd)
     MapWindowPoints(0, wp_id(), (LPPOINT)&mi.rcMonitor, 2);
     return wp_move(wnd, mi.rcMonitor.left, mi.rcMonitor.top, mi.rcMonitor.right,
         mi.rcMonitor.bottom);
+}
+
+WEEBAPI
+int wp_panoramic(wnd_t wnd)
+{
+    RECT r;
+
+    if (!GetWindowRect(wp_id(), &r)) {
+        wp_err("GetWindowRect failed, GLE=%08X", GetLastError());
+        return 1;
+    }
+
+    MapWindowPoints(0, wp_id(), (LPPOINT)&r, 2);
+    return wp_move(wnd, r.left, r.top, r.right, r.bottom);
 }
 
 WEEBAPI
