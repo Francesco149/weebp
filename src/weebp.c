@@ -210,7 +210,7 @@
 
 #define WP_VERSION_MAJOR 1 /* non-backwards-compatible changes */
 #define WP_VERSION_MINOR 1 /* backwards compatible api changes */
-#define WP_VERSION_PATCH 3 /* backwards-compatible changes */
+#define WP_VERSION_PATCH 4 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
 #define STRINGIFY(x) STRINGIFY_(x)
@@ -765,8 +765,15 @@ int wp_fullscreen(wnd_t wnd)
 {
     HMONITOR mon;
     MONITORINFO mi;
+    RECT current_rect;
 
-    mon = MonitorFromWindow(wnd, MONITOR_DEFAULTTONEAREST);
+    if (!GetWindowRect(wnd, &current_rect)) {
+        wp_err("GetWindowRect failed, GLE=%08X", GetLastError());
+        return 1;
+    }
+
+    MapWindowPoints(0, wp_id(), (LPPOINT)&current_rect, 1);
+    mon = MonitorFromPoint(*(POINT*)&current_rect, MONITOR_DEFAULTTONEAREST);
     if (!mon) {
         wp_err("MonitorFromWindow failed, GLE=%08X", GetLastError());
         return 1;
