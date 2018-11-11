@@ -541,7 +541,8 @@ command_t commands[] =
         "    -n|--name abc: window name\n"
         "    -t|--wait: wait until a matching window is found\n"
         "    -v|--wait-visible: wait until a matching window is visible\n"
-        "    -f|--fullscreen: expand window to fullscreen after adding it"
+        "    -f|--fullscreen: expand window to fullscreen after adding it\n"
+        "    -p|--panoramic: expand window to all monitors after adding it"
     },
     {
         "focus", focus,
@@ -587,7 +588,8 @@ command_t commands[] =
         "    --top 123: y coordinate of the top left corner\n"
         "    --right 123: the x coordinate of the bottom right corner\n"
         "    --bottom 123: the y coordinate of the bottom right corner\n"
-        "    -f|--fullscreen: expand window to fullscreen"
+        "    -f|--fullscreen: expand window to fullscreen\n"
+        "    -p|--panoramic: expand window to all monitors"
     },
     {
         "ls", ls,
