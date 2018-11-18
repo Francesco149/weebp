@@ -210,7 +210,7 @@
 
 #define WP_VERSION_MAJOR 1 /* non-backwards-compatible changes */
 #define WP_VERSION_MINOR 2 /* backwards compatible api changes */
-#define WP_VERSION_PATCH 0 /* backwards-compatible changes */
+#define WP_VERSION_PATCH 1 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
 #define STRINGIFY(x) STRINGIFY_(x)
@@ -381,6 +381,23 @@ BOOL CALLBACK find_worker(wnd_t wnd, LPARAM lp)
     return TRUE;
 }
 
+BOOL is_win8_or_later()
+{
+   OSVERSIONINFOEX osvi;
+   DWORDLONG dwlConditionMask = 0;
+
+   ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+   osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+   osvi.dwMajorVersion = 6;
+   osvi.dwMinorVersion = 2;
+
+   VER_SET_CONDITION(dwlConditionMask, VER_MAJORVERSION, VER_GREATER_EQUAL);
+   VER_SET_CONDITION(dwlConditionMask, VER_MINORVERSION, VER_GREATER_EQUAL);
+
+   return VerifyVersionInfo(&osvi, VER_MAJORVERSION | VER_MINORVERSION,
+      dwlConditionMask);
+}
+
 WEEBAPI
 wnd_t wp_id()
 {
@@ -416,18 +433,19 @@ wnd_t wp_id()
 
         log1("checking for wallpaper");
         EnumWindows(find_worker, (LPARAM)&worker);
+    }
 
-        /*
-         * windows 7 with aero is almost the same as windows 10, except that we
-         * have to hide the WorkerW window and render to Progman child windows
-         * instead
-         */
+    /*
+     * windows 7 with aero is almost the same as windows 10, except that we
+     * have to hide the WorkerW window and render to Progman child windows
+     * instead
+     */
 
-        if (worker)
-        {
-            ShowWindow(worker, SW_HIDE);
-            worker = progman;
-        }
+    if (worker && !is_win8_or_later())
+    {
+        log1("detected windows 7, hiding worker window");
+        ShowWindow(worker, SW_HIDE);
+        worker = progman;
     }
 
     if (!worker)
