@@ -210,7 +210,7 @@
 
 #define WP_VERSION_MAJOR 1 /* non-backwards-compatible changes */
 #define WP_VERSION_MINOR 3 /* backwards compatible api changes */
-#define WP_VERSION_PATCH 0 /* backwards-compatible changes */
+#define WP_VERSION_PATCH 1 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
 #define STRINGIFY(x) STRINGIFY_(x)
@@ -805,10 +805,9 @@ int wp_fullscreen(wnd_t wnd)
 {
     HMONITOR mon;
     MONITORINFO mi;
-    RECT current_rect;
+    rect_t current_rect;
 
-    if (!GetWindowRect(wnd, &current_rect)) {
-        wp_err("GetWindowRect failed, GLE=%08X", GetLastError());
+    if (wp_get_rect(wnd, &current_rect)) {
         return 1;
     }
 
@@ -834,10 +833,9 @@ int wp_fullscreen(wnd_t wnd)
 WEEBAPI
 int wp_panoramic(wnd_t wnd)
 {
-    RECT r;
+    rect_t r;
 
-    if (!GetWindowRect(wp_id(), &r)) {
-        wp_err("GetWindowRect failed, GLE=%08X", GetLastError());
+    if (wp_get_rect(wp_id(), &r)) {
         return 1;
     }
 
