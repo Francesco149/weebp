@@ -25,6 +25,10 @@ make sure at least these are checked
 * Enable desktop composition
 * Use visual styles on windows and buttons
 
+if you don't enable these settings, weebp won't be able to put your
+animated wallpaper behind the icons. it will still work, but it will
+cover your desktop icons
+
 # roadmap
 - initial focus is on the command-line interface just because that's what I
 would use, but a gui is not hard to implement later on. it's easy to
