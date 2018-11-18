@@ -4,6 +4,8 @@ wallpaper
 
 ![](https://i.imgur.com/Hqy1uX2.gif)
 
+![](https://i.imgur.com/tZ14Znr.gif)
+
 ![](https://i.imgur.com/VB1Glnu.gif)
 
 github doesn't like having big gifs in the readme, so here's a
