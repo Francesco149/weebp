@@ -210,7 +210,7 @@
 
 #define WP_VERSION_MAJOR 1 /* non-backwards-compatible changes */
 #define WP_VERSION_MINOR 3 /* backwards compatible api changes */
-#define WP_VERSION_PATCH 1 /* backwards-compatible changes */
+#define WP_VERSION_PATCH 2 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
 #define STRINGIFY(x) STRINGIFY_(x)
@@ -811,7 +811,6 @@ int wp_fullscreen(wnd_t wnd)
         return 1;
     }
 
-    MapWindowPoints(0, wp_id(), (LPPOINT)&current_rect, 1);
     mon = MonitorFromPoint(*(POINT*)&current_rect, MONITOR_DEFAULTTONEAREST);
     if (!mon) {
         wp_err("MonitorFromWindow failed, GLE=%08X", GetLastError());
