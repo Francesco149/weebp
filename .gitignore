@@ -4,6 +4,7 @@
 *.lib
 *.dll
 *.exp
+*.swp
 *~
 *.bak
 *.zip
