@@ -17,6 +17,14 @@ and testing are welcome
 only tested on Windows 10 version 1709 build 16299.15, should work on all
 versions of windows 10 and 8.1 as well as Windows 7
 
+# Windows 7 prerequisites
+go to start -> search for
+"Adjust the appearance and performance of windows" and click it, then
+make sure at least these are checked
+* Animate controls and elements inside windows
+* Enable desktop composition
+* Use visual styles on windows and buttons
+
 # roadmap
 - initial focus is on the command-line interface just because that's what I
 would use, but a gui is not hard to implement later on. it's easy to
