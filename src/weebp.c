@@ -209,8 +209,8 @@
 #endif
 
 #define WP_VERSION_MAJOR 1 /* non-backwards-compatible changes */
-#define WP_VERSION_MINOR 2 /* backwards compatible api changes */
-#define WP_VERSION_PATCH 1 /* backwards-compatible changes */
+#define WP_VERSION_MINOR 3 /* backwards compatible api changes */
+#define WP_VERSION_PATCH 0 /* backwards-compatible changes */
 
 #define STRINGIFY_(x) #x
 #define STRINGIFY(x) STRINGIFY_(x)
@@ -255,6 +255,9 @@ WEEBAPI int wp_wait(int* keys, int poll_ms);
  * returns 0 if the pressed key is any of cancel_keys
  */
 WEEBAPI wnd_t wp_pick_window(int* keys, int* cancel_keys, int poll_ms);
+
+/* return wnd's position mapped from screen space to wallpaper space */
+WEEBAPI int wp_map_rect(wnd_t wnd, rect_t* mapped);
 
 /* embeds wnd into the wallpaper window */
 WEEBAPI int wp_add(wnd_t wnd);
@@ -542,11 +545,23 @@ errcheck:
 }
 
 WEEBAPI
+int wp_map_rect(wnd_t wnd, rect_t* mapped)
+{
+    if (wp_get_rect(wnd, mapped)) {
+        return 1;
+    }
+
+    MapWindowPoints(0, wp_id(), (LPPOINT)mapped, 2);
+    return 0;
+}
+
+WEEBAPI
 int wp_add(wnd_t wnd)
 {
     char wndclass[512];
     wnd_t wallpaper = wp_id();
     long and, ex_and;
+    rect_t r;
 
     *wndclass = 0;
     GetClassNameA(wnd, wndclass, sizeof(wndclass) - 1);
@@ -594,12 +609,16 @@ int wp_add(wnd_t wnd)
         return 1;
     }
 
+    /* window retains screen coordinates so we need to adjust them */
+    wp_map_rect(wnd, &r);
+
     if (!SetParent(wnd, wallpaper)) {
         wp_err("SetParent failed, GLE=%08X", GetLastError());
         return 1;
     }
 
     ShowWindow(wnd, SW_SHOW);
+    wp_move(wnd, r.left, r.top, r.right, r.bottom);
 
     return 0;
 }
