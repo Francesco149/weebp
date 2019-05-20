@@ -135,6 +135,25 @@ parseargs:
             *result = FindWindowA(argv[++i], 0);
         }
 
+        // http://forums.codeguru.com/showthread.php?353149-How-to-Get-windows-Handle-using-Process-Id
+        else if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--pid")) {
+            if (i >= argc - 1) return 1;
+
+            DWORD my_pid = strtol(argv[++i], 0, 10);
+
+            HWND h = GetTopWindow(0);
+            while(h) {
+                DWORD pid;
+                DWORD dwThreadId = GetWindowThreadProcessId(h, &pid);
+
+                if(pid == my_pid) {
+                    *result = h;
+                    break;
+                }
+                h = GetNextWindow(h, GW_HWNDNEXT);
+            }
+        }
+
         else if (!strcmp(argv[i], "-n") || !strcmp(argv[i], "--name")) {
             if (i >= argc - 1) return 1;
             *result = FindWindowA(0, argv[++i]);
@@ -542,7 +561,8 @@ command_t commands[] =
         "    -t|--wait: wait until a matching window is found\n"
         "    -v|--wait-visible: wait until a matching window is visible\n"
         "    -f|--fullscreen: expand window to fullscreen after adding it\n"
-        "    -p|--panoramic: expand window to all monitors after adding it"
+        "    -p|--panoramic: expand window to all monitors after adding it\n"
+        "    -d|--pid 123: program id"
     },
     {
         "focus", focus,
