@@ -144,7 +144,7 @@ parseargs:
             HWND h = GetTopWindow(0);
             while(h) {
                 DWORD pid;
-                DWORD dwThreadId = GetWindowThreadProcessId(h, &pid);
+                GetWindowThreadProcessId(h, &pid);
 
                 if(pid == my_pid) {
                     *result = h;
