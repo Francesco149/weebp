@@ -57,7 +57,7 @@ commands
 
 # mpv
 mpv is the ideal candidate to play video files or stream videos to your
-your desktop when combined with weebp. it's an extremely powerful player
+desktop when combined with weebp. it's an extremely powerful player
 that combined with youtube-dl can stream videos and livestreams from almost
 any url as well as conventional video files.
 
