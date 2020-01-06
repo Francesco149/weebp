@@ -20,7 +20,8 @@ call:build cli.c %* -Fewp-headless.exe %weebp_libs% ^
 echo.
 
 echo [ shared library ]
-call:build -LD weebp.c -DWP_LIB %* -Feweebp.dll %weebp_libs% || EXIT /B 1
+call:build -LD weebp.c -DWP_LIB -DWP_IMPLEMENTATION ^
+    %* -Feweebp.dll %weebp_libs% || EXIT /B 1
 echo.
 
 echo [ static library ]
