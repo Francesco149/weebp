@@ -541,7 +541,7 @@ errcheck:
     style &= and;
     exstyle &= ex_and;
     style |= or;
-    style |= ex_or;
+    exstyle |= ex_or;
 
     SetLastError(0);
 
