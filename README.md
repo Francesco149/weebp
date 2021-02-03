@@ -2,6 +2,8 @@
 free and open-source wallpaper engine. set any window or video as your
 wallpaper
 
+UPDATE: for an easy to use front-end, check out https://github.com/SegoCode/AutoWall
+
 ![](https://i.imgur.com/Hqy1uX2.gif)
 
 ![](https://i.imgur.com/tZ14Znr.gif)
