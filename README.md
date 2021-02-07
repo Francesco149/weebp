@@ -16,7 +16,7 @@ github doesn't like having big gifs in the readme, so here's a
 this was put together in ~2 afternoons worth of coding. I can't maintain this
 very regularly as I don't use windows and I have to either fire up a virtual
 machine or install windows temporarily to my 2nd pc to work on it, so help
-and testing are welcome
+and testing are welcome.
 
 only tested on Windows 10 version 1709 build 16299.15, should work on all
 versions of windows 10 and 8.1 as well as Windows 7
