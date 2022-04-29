@@ -422,12 +422,19 @@ wnd_t wp_id()
     wnd_t worker;
 
     log1("scanning for Progman");
-    progman = FindWindowA("Progman", 0);
+    progman = GetShellWindow();
 
     if (!progman)
     {
-        log("failed to find Progman, GLE=%08X", GetLastError());
-        return 0;
+        log("failed to find Progman, GLE=%08X, trying old method", GetLastError());
+        progman = FindWindowA("Progman", 0);
+
+        if (!progman)
+        {
+            log("failed to find Progman, GLE=%08X", GetLastError());
+
+            return 0;
+        }
     }
 
     log1("spawning wallpaper");
@@ -638,7 +645,7 @@ int wp_add(wnd_t wnd)
 }
 
 WEEBAPI
-void wp_focus(wnd_t wnd, int ensure)
+int wp_focus(wnd_t wnd, int ensure)
 {
     /*
     * by focusing progman first we ensure that we trigger focus events even
@@ -649,13 +656,30 @@ void wp_focus(wnd_t wnd, int ensure)
     {
         wnd_t progman;
 
-        progman = FindWindowA("Progman", 0);
+        log1("scanning for Progman");
+        progman = GetShellWindow();
+
+        if (!progman)
+        {
+            log("failed to find Progman, GLE=%08X, trying old method", GetLastError());
+            progman = FindWindowA("Progman", 0);
+
+            if (!progman)
+            {
+                log("failed to find Progman, GLE=%08X", GetLastError());
+
+                return 0;
+            }
+        }
+
         SendMessageA(progman, WM_ACTIVATE, WA_CLICKACTIVE, (LPARAM)progman);
         SendMessageA(progman, WM_SETFOCUS, (WPARAM)progman, 0);
     }
 
     SendMessageA(wnd, WM_ACTIVATE, WA_CLICKACTIVE, (LPARAM)wnd);
     SendMessageA(wnd, WM_SETFOCUS, (WPARAM)wnd, 0);
+
+    return 1;
 }
 
 WEEBAPI
