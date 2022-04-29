@@ -668,7 +668,7 @@ int wp_focus(wnd_t wnd, int ensure)
             {
                 log("failed to find Progman, GLE=%08X", GetLastError());
 
-                return 0;
+                return 1;
             }
         }
 
