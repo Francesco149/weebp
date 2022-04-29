@@ -668,7 +668,7 @@ int wp_focus(wnd_t wnd, int ensure)
             {
                 log("failed to find Progman, GLE=%08X", GetLastError());
 
-                return 1;
+                return 0;
             }
         }
 
@@ -679,7 +679,7 @@ int wp_focus(wnd_t wnd, int ensure)
     SendMessageA(wnd, WM_ACTIVATE, WA_CLICKACTIVE, (LPARAM)wnd);
     SendMessageA(wnd, WM_SETFOCUS, (WPARAM)wnd, 0);
 
-    return 0;
+    return 1;
 }
 
 WEEBAPI
